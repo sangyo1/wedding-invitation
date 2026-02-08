@@ -244,7 +244,7 @@ function formatWeddingMeta(){
     const m = new Intl.DateTimeFormat("ko-KR", { timeZone: SEOUL_TZ, month: "numeric" }).format(d);
     const da = new Intl.DateTimeFormat("ko-KR", { timeZone: SEOUL_TZ, day: "numeric" }).format(d);
     const time = new Intl.DateTimeFormat("ko-KR", { timeZone: SEOUL_TZ, hour: "numeric", minute: "2-digit", hour12: true }).format(d);
-    return `${y}년 ${m}월 ${da}일 ${weekday} ${time} · ${CONFIG.venueName}`;
+    return `${y} ${m} ${da} ${weekday} ${time} · ${CONFIG.venueName}`;
   }else{
     const date = new Intl.DateTimeFormat("en-US", { timeZone: SEOUL_TZ, year:"numeric", month:"2-digit", day:"2-digit" }).format(d);
     const weekday = new Intl.DateTimeFormat("en-US", { timeZone: SEOUL_TZ, weekday:"long" }).format(d);
