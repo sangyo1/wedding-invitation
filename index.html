@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>모바일 청첩장</title>
+
+  <link rel="stylesheet" href="font.css" />
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <main class="wrap">
+
+    <header class="topbar">
+      <div class="lang">
+        <button class="lang-btn active" type="button" data-lang="ko">한글</button>
+        <button class="lang-btn" type="button" data-lang="en">ENG</button>
+      </div>
+    </header>
+
+    <!-- 메인 -->
+    <section class="hero">
+      <div class="hero-img">
+        <img src="image/background-1.png" alt="메인 이미지" />
+      </div>
+
+      <h1 class="hero-title" data-i18n="hero_title">우리 결혼합니다</h1>
+      <p class="hero-names">
+        <span id="groomName">백상윤</span>
+        <span class="heart" aria-hidden="true">♥</span>
+        <span id="brideName">이다흰</span>
+      </p>
+
+      <p class="hero-meta" id="heroMeta"></p>
+    </section>
+
+    <!-- 1) 날짜 -->
+    <section class="section" id="sec-date">
+      <div class="section-cap" data-i18n="sec_date_cap">날짜</div>
+
+      <div class="cal-card">
+        <div class="cal-head">
+          <div class="cal-monthyear" id="calMonthYear">2026. 6</div>
+          <span class="dday-pill" id="ddayPill">D-0</span>
+        </div>
+
+        <div class="cal-grid" id="calGrid"></div>
+
+        <div class="cal-foot">
+          <div class="cal-focus">
+            <span class="star">*</span>
+            <span class="focus-text" id="focusText">상윤 다흰 결혼식</span>
+          </div>
+          <div class="cal-time" id="calTimeLine"></div>
+        </div>
+
+        <div class="cal-count">
+          <span class="muted" data-i18n="dday_label">예식까지</span>
+          <span id="ddayText">0일 00:00:00</span>
+        </div>
+      </div>
+
+      <button class="linkish" id="btnAddCalendar" type="button" data-i18n="btn_add_calendar">
+        캘린더에 추가
+      </button>
+    </section>
+
+    <!-- 2) 초대 -->
+    <section class="section" id="sec-invite">
+      <div class="section-cap" data-i18n="sec_invite_cap">초대</div>
+      <p class="para" id="inviteMessage"></p>
+    </section>
+
+    <!-- 3) 신랑 신부 -->
+    <section class="section" id="sec-couple">
+      <div class="section-cap" data-i18n="sec_couple_cap">신랑 · 신부</div>
+
+      <div class="couple-line">
+        <span class="name" id="groomName2">백상윤</span>
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="name" id="brideName2">이다흰</span>
+      </div>
+
+      <!-- 부모님 표기 -->
+      <div class="couple-parents" id="coupleParents"></div>
+    </section>
+
+    <!-- 4) 위치 -->
+    <section class="section" id="sec-location">
+      <div class="section-cap" data-i18n="sec_location_cap">오시는 길</div>
+
+      <div class="loc-name" id="venueName">휘겸재</div>
+      <div class="loc-addr" id="venueAddr"></div>
+
+      <div class="tabs">
+        <button type="button" class="tab active" data-tab="map" data-i18n="tab_map">약도</button>
+        <button type="button" class="tab" data-tab="guide" data-i18n="tab_guide">오시는길</button>
+      </div>
+
+      <!-- 약도: 구글맵 -->
+      <div class="tab-panel show" id="panel-map">
+        <div class="mapbox">
+          <iframe
+            title="휘겸재 구글맵"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            src="https://www.google.com/maps?q=%EC%84%9C%EC%9A%B8%20%EC%A2%85%EB%A1%9C%EA%B5%AC%20%EB%B6%81%EC%B4%8C%EB%A1%9C%2046-3%20%ED%9C%98%EA%B2%B8%EC%9E%AC&output=embed">
+          </iframe>
+        </div>
+      </div>
+
+      <!-- 오시는길: 텍스트 -->
+      <div class="tab-panel" id="panel-guide">
+        <div class="guide" id="guideText"></div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn ghost" id="btnCopyAddr" type="button" data-i18n="btn_copy_addr">주소 복사</button>
+      </div>
+    </section>
+
+    <!-- 참석의사 -->
+    <section class="section" id="sec-rsvp">
+      <div class="section-cap" data-i18n="rsvp_title">참석 의사 전달</div>
+
+      <div class="rsvp-switch">
+        <button type="button" class="seg active" data-side="groom" data-i18n="rsvp_groom">신랑측</button>
+        <button type="button" class="seg" data-side="bride" data-i18n="rsvp_bride">신부측</button>
+      </div>
+
+      <form id="rsvpForm" class="rsvp-form">
+        <label class="field">
+          <span class="label" data-i18n="rsvp_name">이름</span>
+          <input class="input" id="rsvpName" maxlength="30" required placeholder="예: 홍길동" />
+        </label>
+
+        <label class="field">
+          <span class="label" data-i18n="rsvp_attend">참석</span>
+          <select class="input" id="rsvpAttend">
+            <option value="attend" data-i18n="rsvp_attend_yes">참석</option>
+            <option value="no" data-i18n="rsvp_attend_no">불참</option>
+          </select>
+        </label>
+
+        <div class="btn-row">
+          <button class="btn primary" type="submit" id="btnRsvpSubmit" data-i18n="rsvp_submit">제출</button>
+        </div>
+
+        <p class="footnote" id="rsvpStatus" aria-live="polite"></p>
+      </form>
+    </section>
+
+    <!-- 방명록 -->
+    <section class="section" id="sec-guestbook">
+      <div class="section-cap" data-i18n="sec_guestbook_cap">방명록</div>
+
+      <form class="form" id="gbForm">
+        <div class="grid2">
+          <label class="field">
+            <span class="label" data-i18n="gb_name">이름</span>
+            <input class="input" id="gbName" maxlength="20" required placeholder="예: 홍길동" />
+          </label>
+
+          <label class="field">
+            <span class="label" data-i18n="gb_pass">비밀번호</span>
+            <input class="input" id="gbPass" type="password" maxlength="20" required placeholder="삭제용 비밀번호" />
+          </label>
+        </div>
+
+        <label class="field">
+          <span class="label" data-i18n="gb_msg">메시지</span>
+          <textarea class="textarea" id="gbMsg" rows="3" maxlength="200" required placeholder="축하 메시지를 남겨주세요 (200자)"></textarea>
+        </label>
+
+        <div class="btn-row">
+          <button class="btn primary" type="submit" data-i18n="gb_submit">남기기</button>
+          <button class="btn ghost" type="button" id="gbClear" data-i18n="gb_clear">지우기</button>
+        </div>
+
+        <p class="footnote" data-i18n="gb_note">
+          * 본인이 쓴 글은 “삭제”를 누른 뒤, 작성 시 입력한 비밀번호로 삭제할 수 있어요.
+        </p>
+      </form>
+
+      <div class="gb-list" id="gbList" aria-live="polite"></div>
+    </section>
+
+    <!-- ✅ 마음 전하실 곳 (아코디언 + 여러명 + 복사) -->
+    <section class="section" id="sec-gift">
+      <div class="section-cap" data-i18n="sec_gift_cap">마음 전하실 곳</div>
+
+      <p class="para gift-msg" id="giftMessage" data-i18n="gift_message"></p>
+
+      <!-- 신랑측 -->
+      <details class="acc" open>
+        <summary class="acc-head">
+          <span data-i18n="gift_groom_side">신랑측</span>
+          <span class="acc-icon" aria-hidden="true"></span>
+        </summary>
+        <div class="acc-body" id="giftGroomList"></div>
+      </details>
+
+      <!-- 신부측 -->
+      <details class="acc">
+        <summary class="acc-head">
+          <span data-i18n="gift_bride_side">신부측</span>
+          <span class="acc-icon" aria-hidden="true"></span>
+        </summary>
+        <div class="acc-body" id="giftBrideList"></div>
+      </details>
+
+      <p class="footnote" id="giftNote" data-i18n="gift_note"></p>
+    </section>
+
+
+    <footer class="footer">© 2026</footer>
+  </main>
+</body>
+</html>
