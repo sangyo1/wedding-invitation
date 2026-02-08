@@ -185,15 +185,19 @@ body{
   color: var(--muted);
 }
 .cal-cell.is-empty{ opacity: 0; }
+/* ✅ 일반 날짜: 박스 제거 */
 .cal-cell.is-day{
-  border: 1px solid rgba(0,0,0,.06);
-  background: rgba(0,0,0,.01);
+  border: none;
+  background: transparent;
 }
+
+/* ✅ 7일(타겟)만 박스 느낌 유지 */
 .cal-cell.is-target{
   border: 1px solid rgba(20,83,45,.22);
   background: rgba(20,83,45,.08);
   color: var(--green);
   font-weight: 600;
+  border-radius: 10px; /* 혹시라도 유지 확실히 */
 }
 .cal-foot{
   margin-top: 8px;
@@ -497,4 +501,7 @@ body{
   .wrap{ padding: 12px 14px 24px; }
   .grid2{ grid-template-columns: 1fr; }
   .cal-cell{ height: 32px; }
+}
+.cal-foot{
+  display:none;
 }

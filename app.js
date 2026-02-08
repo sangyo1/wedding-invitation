@@ -650,10 +650,12 @@ function setupGuestbook(){
 function downloadICS(){
   const start = new Date(CONFIG.weddingISO);
   const end = new Date(start.getTime() + 2 * 60 * 60 * 1000);
+
   const dt = (d)=> {
     const z = new Date(d.getTime() - d.getTimezoneOffset()*60000);
     return z.toISOString().replace(/[-:]/g,"").replace(".000","") + "Z";
   };
+
   const title = `${CONFIG.groomName} ♥ ${CONFIG.brideName} Wedding`;
   const desc = (LANG==="ko")
     ? `결혼식에 초대합니다.\n장소: ${CONFIG.venueName}\n주소: ${CONFIG.venueAddr}`
@@ -677,6 +679,20 @@ LOCATION:${escapeICS(loc)}
 END:VEVENT
 END:VCALENDAR`;
 
+  // ✅ iOS 우선: data URL로 열기 (캘린더 추가 UX가 잘 뜸)
+  const dataUrl = "data:text/calendar;charset=utf-8," + encodeURIComponent(ics);
+
+  // iOS 감지(대략)
+  const ua = navigator.userAgent || "";
+  const isIOS = /iPhone|iPad|iPod/i.test(ua);
+
+  if(isIOS){
+    // 사파리에서 새 창으로 열어 캘린더 처리 유도
+    window.location.href = dataUrl;
+    return;
+  }
+
+  // ✅ 그 외 브라우저: 기존 방식(다운로드)
   const blob = new Blob([ics], {type:"text/calendar;charset=utf-8"});
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
@@ -687,6 +703,7 @@ END:VCALENDAR`;
   a.remove();
   URL.revokeObjectURL(url);
 }
+
 function escapeICS(s){
   return String(s).replace(/\\/g, "\\\\").replace(/\n/g, "\\n").replace(/,/g, "\\,").replace(/;/g, "\\;");
 }
