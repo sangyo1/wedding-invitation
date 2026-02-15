@@ -62,6 +62,8 @@ const I18N = {
 
     tab_map: "약도",
     tab_guide: "오시는길",
+    btn_toggle_guide_open: "오시는길 열기",
+    btn_toggle_guide_close: "오시는길 닫기",
 
     btn_copy_addr: "주소 복사",
 
@@ -98,7 +100,7 @@ const I18N = {
     sec_video_cap: "우리의 순간",
 
     invite_message:
-      "중학교 시절에 만나,\n시간이 흘러 이렇게 한자리에 서게 되었습니다.\n\n한 치 앞도 알수 없는 인생이지만,\n서로를 향한 한결같은 믿음으로\n앞으로의 시간을 함께하려 합니다.\n\n건강하고 행복하게\n이 마음 간직하며 살아가겠습니다.\n\n부디 오셔서,\n저희의 새로운 시작을 함께해주시면\n감사하겠습니다.",
+      "중학교 시절에 만나 시간이 흘러 \n이렇게 한자리에 서게 되었습니다.\n\n한 치 앞도 알 수 없는 인생이지만\n서로를 향한 한결같은 믿음으로\n앞으로의 시간을 함께하려 합니다.\n\n저희의 새로운 시작을 함께해 주시면\n행복한 마음으로 간직하겠습니다.\n\n건강하고 행복하게\n이 마음 간직하며 살아가겠습니다.\n\n저희의 새로운 시작을 함께 축하해 주세요.",
 
     weekShort: ["일","월","화","수","목","금","토"],
 
@@ -124,6 +126,8 @@ const I18N = {
 
     tab_map: "Map",
     tab_guide: "Directions",
+    btn_toggle_guide_open: "Show Directions",
+    btn_toggle_guide_close: "Hide Directions",
 
     btn_copy_addr: "Copy Address",
 
@@ -160,7 +164,7 @@ const I18N = {
     sec_video_cap: "Our Moment",
 
     invite_message:
-      "We first met in middle school,\nand over time, our journey has brought us here today.\n\nThough life is full of uncertainty,\nwe have chosen to walk forward together\nwith unwavering trust in one another.\n\nWe promise to cherish this love\nand build a life filled with health and happiness.\n\nWe would be honored\nif you would join us\nand celebrate the beginning of our new chapter.",
+      "We first met in middle school, and over time, our journey has brought us to this moment.\n\nThough life is uncertain,\nwe choose to walk forward together\nwith unwavering trust in one another.\n\nIf you join us for this new beginning,\nwe will cherish it with grateful hearts.\n\nWe will hold on to this love\nand live with health and happiness.\n\nPlease celebrate the beginning of our new chapter with us.",
 
     weekShort: ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],
 
@@ -282,6 +286,7 @@ function setI18n(lang){
 
   // guide는 innerHTML
   $("guideText").innerHTML = formatGuide((LANG === "ko") ? CONFIG.guideKO : CONFIG.guideEN);
+  updateGuideToggleLabel();
 
   // 부모님 표기
   $("coupleParents").textContent = (LANG==="ko") ? CONFIG.coupleParentsKO : CONFIG.coupleParentsEN;
@@ -379,16 +384,26 @@ function startCountdown(){
   setInterval(tick, 1000);
 }
 
-function setupTabs(){
-  $$(".tab").forEach(btn=>{
-    btn.addEventListener("click", ()=>{
-      $$(".tab").forEach(b=>b.classList.remove("active"));
-      btn.classList.add("active");
+function updateGuideToggleLabel(){
+  const btn = $("btnToggleGuide");
+  if(!btn) return;
+  const expanded = btn.getAttribute("aria-expanded") === "true";
+  btn.textContent = expanded
+    ? (I18N[LANG].btn_toggle_guide_close || "Hide Directions")
+    : (I18N[LANG].btn_toggle_guide_open || "Show Directions");
+}
 
-      const key = btn.dataset.tab;
-      $("panel-map").classList.toggle("show", key==="map");
-      $("panel-guide").classList.toggle("show", key==="guide");
-    });
+function setupGuideToggle(){
+  const btn = $("btnToggleGuide");
+  const panel = $("panel-guide");
+  if(!btn || !panel) return;
+
+  btn.addEventListener("click", ()=>{
+    const expanded = btn.getAttribute("aria-expanded") === "true";
+    const next = !expanded;
+    btn.setAttribute("aria-expanded", String(next));
+    panel.classList.toggle("show", next);
+    updateGuideToggleLabel();
   });
 }
 
@@ -444,8 +459,6 @@ function renderGiftList(containerId, items){
 function setupActions(){
   $("groomName").textContent = CONFIG.groomName;
   $("brideName").textContent = CONFIG.brideName;
-  $("groomName2").textContent = CONFIG.groomName;
-  $("brideName2").textContent = CONFIG.brideName;
 
   $("venueName").textContent = CONFIG.venueName;
   $("venueAddr").textContent = CONFIG.venueAddr || "";
@@ -459,7 +472,7 @@ function setupActions(){
 
   $("btnAddCalendar").addEventListener("click", downloadICS);
 
-  setupTabs();
+  setupGuideToggle();
   setupRsvp();
 
   // gift 최초 렌더
@@ -647,14 +660,11 @@ function setupGuestbook(){
 }
 
 /* ---------- ICS download ---------- */
-function downloadICS(){
+async function downloadICS(){
   const start = new Date(CONFIG.weddingISO);
   const end = new Date(start.getTime() + 2 * 60 * 60 * 1000);
 
-  const dt = (d)=> {
-    const z = new Date(d.getTime() - d.getTimezoneOffset()*60000);
-    return z.toISOString().replace(/[-:]/g,"").replace(".000","") + "Z";
-  };
+  const dt = (d) => d.toISOString().replace(/[-:]/g, "").replace(".000", "");
 
   const title = `${CONFIG.groomName} ♥ ${CONFIG.brideName} Wedding`;
   const desc = (LANG==="ko")
@@ -679,29 +689,52 @@ LOCATION:${escapeICS(loc)}
 END:VEVENT
 END:VCALENDAR`;
 
-  // ✅ iOS 우선: data URL로 열기 (캘린더 추가 UX가 잘 뜸)
-  const dataUrl = "data:text/calendar;charset=utf-8," + encodeURIComponent(ics);
+  const fileName = "wedding.ics";
+  const blob = new Blob([ics], {type: "text/calendar;charset=utf-8"});
+  const file = (typeof File !== "undefined")
+    ? new File([blob], fileName, { type: "text/calendar;charset=utf-8" })
+    : null;
 
-  // iOS 감지(대략)
-  const ua = navigator.userAgent || "";
-  const isIOS = /iPhone|iPad|iPod/i.test(ua);
-
-  if(isIOS){
-    // 사파리에서 새 창으로 열어 캘린더 처리 유도
-    window.location.href = dataUrl;
-    return;
+  // 모바일 사파리/크롬에서 다운로드가 불안정할 수 있어, 지원 시 공유 시트를 우선 사용
+  if(file && navigator.share && navigator.canShare){
+    try{
+      if(navigator.canShare({ files: [file] })){
+        await navigator.share({
+          title,
+          text: (LANG==="ko") ? "캘린더에 추가해 주세요." : "Please add this to your calendar.",
+          files: [file]
+        });
+        return;
+      }
+    }catch{
+      // 사용자가 공유를 취소하거나 공유 앱이 없으면 아래 폴백 진행
+    }
   }
 
-  // ✅ 그 외 브라우저: 기존 방식(다운로드)
-  const blob = new Blob([ics], {type:"text/calendar;charset=utf-8"});
+  // 1차 폴백: 일반 파일 다운로드
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
-  a.download = "wedding.ics";
+  a.download = fileName;
   document.body.appendChild(a);
   a.click();
   a.remove();
-  URL.revokeObjectURL(url);
+  setTimeout(()=>URL.revokeObjectURL(url), 1000);
+
+  // 2차 폴백: 모바일 브라우저에서 다운로드가 막히는 경우 구글 캘린더 템플릿 오픈
+  const details = `${desc}\n\n${loc}`;
+  const gcalUrl =
+    "https://calendar.google.com/calendar/render?action=TEMPLATE"
+    + `&text=${encodeURIComponent(title)}`
+    + `&dates=${encodeURIComponent(`${dt(start)}/${dt(end)}`)}`
+    + `&details=${encodeURIComponent(details)}`
+    + `&location=${encodeURIComponent(loc)}`;
+
+  const ua = navigator.userAgent || "";
+  const isMobile = /iPhone|iPad|iPod|Android/i.test(ua);
+  if(isMobile){
+    window.open(gcalUrl, "_blank", "noopener,noreferrer");
+  }
 }
 
 function escapeICS(s){

@@ -75,9 +75,17 @@
 
 
       <div class="couple-line">
-        <span class="name" id="brideName2">이다흰</span>
-        <span class="heart" aria-hidden="true">♥</span>
-        <span class="name" id="groomName2">백상윤</span>
+        <div class="name">
+          <span class="parents">이용식 <span class="parent-dot" aria-hidden="true">·</span> 최윤정</span>
+          <span class="role">의 딸 신부</span>
+          <span class="person-name">이다흰</span>
+        </div>
+        <div class="couple-heart" aria-hidden="true">💚</div>
+        <div class="name">
+          <span class="parents">버니 번하드 <span class="parent-dot" aria-hidden="true">·</span> 최성환</span>
+          <span class="role">의 아들 신랑</span>
+          <span class="person-name">백상윤</span>
+        </div>
 
       </div>
 
@@ -92,30 +100,26 @@
       <div class="loc-name" id="venueName">휘겸재</div>
       <div class="loc-addr" id="venueAddr"></div>
 
-      <div class="tabs">
-        <button type="button" class="tab active" data-tab="map" data-i18n="tab_map">약도</button>
-        <button type="button" class="tab" data-tab="guide" data-i18n="tab_guide">오시는길</button>
+      <div class="btn-row">
+        <button class="btn ghost" id="btnCopyAddr" type="button" data-i18n="btn_copy_addr">주소 복사</button>
       </div>
 
       <!-- 약도: 구글맵 -->
-      <div class="tab-panel show" id="panel-map">
-        <div class="mapbox">
-          <iframe
-            title="휘겸재 구글맵"
-            loading="lazy"
-            referrerpolicy="no-referrer-when-downgrade"
-            src="https://www.google.com/maps?q=%EC%84%9C%EC%9A%B8%20%EC%A2%85%EB%A1%9C%EA%B5%AC%20%EB%B6%81%EC%B4%8C%EB%A1%9C%2046-3%20%ED%9C%98%EA%B2%B8%EC%9E%AC&output=embed">
-          </iframe>
-        </div>
-      </div>
-
-      <!-- 오시는길: 텍스트 -->
-      <div class="tab-panel" id="panel-guide">
-        <div class="guide" id="guideText"></div>
+      <div class="mapbox">
+        <iframe
+          title="휘겸재 구글맵"
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          src="https://www.google.com/maps?q=%EC%84%9C%EC%9A%B8%20%EC%A2%85%EB%A1%9C%EA%B5%AC%20%EB%B6%81%EC%B4%8C%EB%A1%9C%2046-3%20%ED%9C%98%EA%B2%B8%EC%9E%AC&output=embed">
+        </iframe>
       </div>
 
       <div class="btn-row">
-        <button class="btn ghost" id="btnCopyAddr" type="button" data-i18n="btn_copy_addr">주소 복사</button>
+        <button class="btn ghost" id="btnToggleGuide" type="button" aria-expanded="false" data-i18n="btn_toggle_guide_open">오시는길 열기</button>
+      </div>
+
+      <div class="guide-panel" id="panel-guide">
+        <div class="guide" id="guideText"></div>
       </div>
     </section>
 

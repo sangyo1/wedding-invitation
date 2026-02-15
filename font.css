@@ -99,6 +99,11 @@ body{
   color: var(--text);
   white-space: pre-line;
 }
+#inviteMessage{
+  text-align: center;
+  font-size: 15px;
+  line-height: 1.4;
+}
 
 .footnote{
   margin: 10px 0 0;
@@ -236,12 +241,31 @@ body{
 /* couple */
 .couple-line{
   display:flex;
+  flex-direction: column;
   justify-content:center;
   align-items:center;
-  gap:10px;
+  gap:8px;
+  margin-top: 16px;
   font-size: 15px;
+  text-align: center;
 }
 .couple-line .name{ font-weight: 400; }
+.couple-line .parents{ font-weight: 700; }
+.couple-line .role{
+  font-size: 13px;
+  color: var(--muted);
+}
+.couple-line .person-name{
+  font-weight: 700;
+}
+.couple-line .parent-dot{
+  color: var(--green);
+  margin: 0 3px;
+}
+.couple-heart{
+  font-size: 18px;
+  line-height: 1;
+}
 
 .couple-parents{
   margin-top: 10px;
@@ -255,39 +279,25 @@ body{
 .loc-name{ font-size: 15px; font-weight: 400; }
 .loc-addr{ margin-top: 4px; font-size: 14px; color: var(--muted); }
 
-/* =========================
-   약도 / 오시는길 탭
-========================= */
-.tabs{
-  display:flex;
-  gap: 8px;
-  margin-top: 12px;
-}
-.tab{
-  flex:1;
-  border: 1px solid var(--soft);
-  background:#fff;
-  border-radius: 999px;
-  padding: 10px 10px;
-  font-size: 13px;
-  font-weight: 400;
-  cursor:pointer;
-  color: var(--muted);
-}
-.tab.active{
-  background: rgba(20,83,45,.08);
-  color: var(--green);
-  border-color: rgba(20,83,45,.18);
-}
-
-.tab-panel{ display:none; margin-top: 12px; }
-.tab-panel.show{ display:block; }
-
 .mapbox{
+  margin-top: 12px;
   border: 1px solid var(--soft);
   border-radius: var(--radius);
   overflow:hidden;
   background:#fafafa;
+}
+
+.guide-panel{
+  display:none;
+  margin-top: 12px;
+}
+.guide-panel.show{
+  display:block;
+}
+#btnToggleGuide{
+  color: var(--green);
+  border-color: rgba(20,83,45,.25);
+  background: rgba(20,83,45,.06);
 }
 
 /* ✅ 구글맵 iframe 크게 */
