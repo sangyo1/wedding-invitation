@@ -84,6 +84,9 @@ const I18N = {
     gb_msg: "메시지",
     gb_submit: "남기기",
     gb_clear: "지우기",
+    gb_name_ph: "예: 홍길동",
+    gb_pass_ph: "삭제용 비밀번호",
+    gb_msg_ph: "축하 메시지를 남겨주세요 (200자)",
     gb_note: "* 본인이 쓴 글은 “삭제”를 누른 뒤, 작성 시 입력한 비밀번호로 삭제할 수 있어요.",
 
     // ✅ 마음 전하실 곳
@@ -145,12 +148,15 @@ const I18N = {
     gb_msg: "Message",
     gb_submit: "Post",
     gb_clear: "Clear",
+    gb_name_ph: "e.g. Alex Kim",
+    gb_pass_ph: "Password for deletion",
+    gb_msg_ph: "Leave your message (max 200 chars)",
     gb_note: "* To delete your post, tap “Delete” and enter the password you used.",
 
     // ✅ gifts
     sec_gift_cap: "With Love",
     gift_message:
-      "For those who would like to send their congratulations from afar,\nhere are the details.\nThank you sincerely for your warm wishes—we will cherish your kindness.",
+      "For those who would like to send their congratulations from a far, here are the details.\nThank you sincerely for your warm wishes—we will cherish your kindness.",
     gift_groom_side: "Groom side",
     gift_bride_side: "Bride side",
     btn_copy: "Copy",
@@ -277,6 +283,9 @@ function setI18n(lang){
   });
 
   $("inviteMessage").textContent = I18N[LANG].invite_message;
+  $("gbName").placeholder = I18N[LANG].gb_name_ph || "";
+  $("gbPass").placeholder = I18N[LANG].gb_pass_ph || "";
+  $("gbMsg").placeholder = I18N[LANG].gb_msg_ph || "";
 
   // guide는 innerHTML
   $("guideText").innerHTML = formatGuide((LANG === "ko") ? CONFIG.guideKO : CONFIG.guideEN);
@@ -688,6 +697,17 @@ END:VCALENDAR`;
 
   const fileName = "wedding.ics";
   const blob = new Blob([ics], {type: "text/calendar;charset=utf-8"});
+  const ua = navigator.userAgent || "";
+  const isIOS = /iPhone|iPad|iPod/i.test(ua);
+
+  // iOS: .ics 파일을 직접 열어 Apple Calendar로 연결
+  if(isIOS){
+    const iosUrl = URL.createObjectURL(blob);
+    window.location.href = iosUrl;
+    setTimeout(()=>URL.revokeObjectURL(iosUrl), 15000);
+    return;
+  }
+
   const file = (typeof File !== "undefined")
     ? new File([blob], fileName, { type: "text/calendar;charset=utf-8" })
     : null;
@@ -717,21 +737,6 @@ END:VCALENDAR`;
   a.click();
   a.remove();
   setTimeout(()=>URL.revokeObjectURL(url), 1000);
-
-  // 2차 폴백: 모바일 브라우저에서 다운로드가 막히는 경우 구글 캘린더 템플릿 오픈
-  const details = `${desc}\n\n${loc}`;
-  const gcalUrl =
-    "https://calendar.google.com/calendar/render?action=TEMPLATE"
-    + `&text=${encodeURIComponent(title)}`
-    + `&dates=${encodeURIComponent(`${dt(start)}/${dt(end)}`)}`
-    + `&details=${encodeURIComponent(details)}`
-    + `&location=${encodeURIComponent(loc)}`;
-
-  const ua = navigator.userAgent || "";
-  const isMobile = /iPhone|iPad|iPod|Android/i.test(ua);
-  if(isMobile){
-    window.open(gcalUrl, "_blank", "noopener,noreferrer");
-  }
 }
 
 function escapeICS(s){
