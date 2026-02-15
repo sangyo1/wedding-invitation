@@ -100,7 +100,7 @@ const I18N = {
     gift_note: "* 복사 버튼을 누르면 계좌/아이디가 클립보드에 저장됩니다.",
 
     invite_message:
-      "중학교 시절에 만나 시간이 흘러 \n이렇게 한자리에 서게 되었습니다.\n\n한 치 앞도 알 수 없는 인생이지만\n서로를 향한 한결같은 믿음으로\n앞으로의 시간을 함께하려 합니다.\n\n저희의 새로운 시작을 함께해 주시면\n행복한 마음으로 간직하겠습니다.\n\n건강하고 행복하게\n이 마음 간직하며 살아가겠습니다.\n\n저희의 새로운 시작을 함께 축하해 주세요.",
+      "중학교 시절에 만나\n시간이 흘러 이렇게 한자리에 서게 되었습니다.\n\n한 치 앞도 알 수 없는 시간들 속에\n서로를 향한 한결같은 믿음으로\n앞으로의 인생을 함꼐하려 합니다.\n\n건강하고 행복하게\n이 마음 간직하며 살아가겠습니다.\n\n",
 
     weekShort: ["일","월","화","수","목","금","토"],
 
@@ -164,7 +164,7 @@ const I18N = {
     gift_note: "* Tap “Copy” to copy the details to your clipboard.",
 
     invite_message:
-      "We first met in middle school, and over time, our journey has brought us to this moment.\n\nThough life is uncertain,\nwe choose to walk forward together\nwith unwavering trust in one another.\n\nIf you join us for this new beginning,\nwe will cherish it with grateful hearts.\n\nWe will hold on to this love\nand live with health and happiness.\n\nPlease celebrate the beginning of our new chapter with us.",
+      "We met in middle school,\nand as time passed, we have come to stand here together today.\n\nIn times where even the next step is unknown,\nwe have chosen to share the rest of our lives\nwith unwavering trust in each other.\n\nWe will hold this feeling close\nand live with health and happiness.\n\n",
 
     weekShort: ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],
 
