@@ -102,7 +102,7 @@ body{
 #inviteMessage{
   text-align: center;
   font-size: 15px;
-  line-height: 1.4;
+  line-height: 1.7;
 }
 
 .footnote{
@@ -245,7 +245,7 @@ body{
   justify-content:center;
   align-items:center;
   gap:8px;
-  margin-top: 16px;
+  margin-top: 32px;
   font-size: 15px;
   text-align: center;
 }
